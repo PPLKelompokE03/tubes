@@ -2,17 +2,28 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Restaurant extends Model
 {
-    // Other model properties and methods
+    use HasFactory;
 
-    public function user() {
+    protected $fillable = [
+        'user_id',
+        'name',
+        'address',
+        'description',
+        'image',
+    ];
+
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function mysteryBoxes() {
+    public function mysteryBoxes()
+    {
         return $this->hasMany(MysteryBox::class);
     }
 }
