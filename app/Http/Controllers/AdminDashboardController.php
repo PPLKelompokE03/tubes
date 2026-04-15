@@ -20,6 +20,7 @@ class AdminDashboardController extends Controller
             'totalUsers' => User::count(),
             'totalRestaurants' => Restaurant::count(),
             'totalOrders' => Order::count(),
+            'totalSales' => Order::whereIn('status', ['paid', 'completed'])->sum('total_price'),
             'recentOrders' => $recentOrders,
         ]);
     }

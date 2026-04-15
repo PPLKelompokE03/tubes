@@ -21,7 +21,7 @@
                         @forelse($mysteryBoxes as $box)
                             <tr class="border-t border-gray-200 dark:border-gray-700">
                                 <td class="py-2">{{ $box->name }}</td>
-                                <td class="py-2">{{ $box->restaurant->name ?? '-' }}</td>
+                                <td class="py-2">{{ $box->restaurant?->name ?? '-' }}</td>
                                 <td class="py-2">Rp {{ number_format((float) $box->price, 0, ',', '.') }}</td>
                                 <td class="py-2">{{ $box->stock }}</td>
                             </tr>

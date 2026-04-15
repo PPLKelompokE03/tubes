@@ -7,9 +7,19 @@
 
     <div class="py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">
-                <p class="text-sm text-gray-500 dark:text-gray-400">Total Orders</p>
-                <p class="text-3xl font-bold text-gray-900 dark:text-gray-100">{{ $totalOrders }}</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Orders</p>
+                    <p class="text-3xl font-bold text-gray-900 dark:text-gray-100">{{ $totalOrders ?? 0 }}</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Paid/Completed Orders</p>
+                    <p class="text-3xl font-bold text-gray-900 dark:text-gray-100">{{ $paidOrders ?? 0 }}</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Spent</p>
+                    <p class="text-3xl font-bold text-gray-900 dark:text-gray-100">Rp {{ number_format((float) ($totalSpent ?? 0), 0, ',', '.') }}</p>
+                </div>
             </div>
 
             <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">
@@ -30,9 +40,9 @@
                             </tr>
                         </thead>
                         <tbody class="text-gray-900 dark:text-gray-100">
-                            @forelse($orders->take(5) as $order)
+                            @forelse(($orders ?? collect()) as $order)
                                 <tr class="border-t border-gray-200 dark:border-gray-700">
-                                    <td class="py-2">{{ $order->mysteryBox->name ?? '-' }}</td>
+                                    <td class="py-2">{{ $order->mysteryBox?->name ?? '-' }}</td>
                                     <td class="py-2">{{ $order->quantity }}</td>
                                     <td class="py-2">Rp {{ number_format((float) $order->total_price, 0, ',', '.') }}</td>
                                     <td class="py-2 capitalize">{{ $order->status }}</td>

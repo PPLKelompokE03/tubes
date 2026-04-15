@@ -23,8 +23,8 @@
                         @forelse($orders as $order)
                             <tr class="border-t border-gray-200 dark:border-gray-700">
                                 <td class="py-2">#{{ $order->id }}</td>
-                                <td class="py-2">{{ $order->user->name ?? '-' }}</td>
-                                <td class="py-2">{{ $order->mysteryBox->name ?? '-' }}</td>
+                                <td class="py-2">{{ $order->user?->name ?? '-' }}</td>
+                                <td class="py-2">{{ $order->mysteryBox?->name ?? '-' }}</td>
                                 <td class="py-2">{{ $order->quantity }}</td>
                                 <td class="py-2">Rp {{ number_format((float) $order->total_price, 0, ',', '.') }}</td>
                                 <td class="py-2 capitalize">{{ $order->status }}</td>

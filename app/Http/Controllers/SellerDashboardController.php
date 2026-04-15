@@ -14,23 +14,26 @@ class SellerDashboardController extends Controller
     {
         $sellerId = $request->user()->id;
 
-        $restaurants = Restaurant::where('user_id', $sellerId)->latest()->get();
-        $mysteryBoxes = MysteryBox::whereHas('restaurant', function ($query) use ($sellerId) {
+        $restaurants = Restaurant::where('user_id', $sellerId)->latest()->take(5)->get();
+        $mysteryBoxes = MysteryBox::with('restaurant')->whereHas('restaurant', function ($query) use ($sellerId) {
             $query->where('user_id', $sellerId);
-        })->latest()->get();
-        $incomingOrders = Order::whereHas('mysteryBox.restaurant', function ($query) use ($sellerId) {
+        })->latest()->take(5)->get();
+        $incomingOrders = Order::with(['user', 'mysteryBox.restaurant'])->whereHas('mysteryBox.restaurant', function ($query) use ($sellerId) {
             $query->where('user_id', $sellerId);
-        })->latest()->get();
+        })->latest()->take(10)->get();
 
-        $totalSales = $incomingOrders
-            ->whereIn('status', ['paid', 'completed'])
-            ->sum('total_price');
+        $totalSales = Order::whereHas('mysteryBox.restaurant', function ($query) use ($sellerId) {
+            $query->where('user_id', $sellerId);
+        })->whereIn('status', ['paid', 'completed'])->sum('total_price');
 
         return view('dashboards.seller', [
             'restaurants' => $restaurants,
             'mysteryBoxes' => $mysteryBoxes,
             'incomingOrders' => $incomingOrders,
             'totalSales' => $totalSales,
+            'restaurantCount' => Restaurant::where('user_id', $sellerId)->count(),
+            'mysteryBoxCount' => MysteryBox::whereHas('restaurant', fn ($query) => $query->where('user_id', $sellerId))->count(),
+            'incomingOrderCount' => Order::whereHas('mysteryBox.restaurant', fn ($query) => $query->where('user_id', $sellerId))->count(),
         ]);
     }
 
