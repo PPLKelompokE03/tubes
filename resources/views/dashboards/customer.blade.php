@@ -25,9 +25,14 @@
             <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Order History</h3>
-                    <a href="{{ route('dashboard.orders') }}" class="text-indigo-600 dark:text-indigo-400 hover:underline">
-                        View All
-                    </a>
+                    <div class="flex items-center gap-4">
+                        <a href="{{ route('dashboard.restaurants') }}" class="text-emerald-600 dark:text-emerald-400 hover:underline">
+                            Browse Restaurants
+                        </a>
+                        <a href="{{ route('dashboard.orders') }}" class="text-indigo-600 dark:text-indigo-400 hover:underline">
+                            View All
+                        </a>
+                    </div>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full text-sm">

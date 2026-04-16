@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -38,6 +39,30 @@ class DashboardController extends Controller
         return view('lists.orders', [
             'orders' => $orders,
             'title' => 'My Orders',
+        ]);
+    }
+
+    public function restaurants(): View
+    {
+        $restaurants = Restaurant::withCount('mysteryBoxes')
+            ->latest()
+            ->get();
+
+        return view('customer.restaurants.index', [
+            'restaurants' => $restaurants,
+        ]);
+    }
+
+    public function restaurantMenus(Restaurant $restaurant): View
+    {
+        $mysteryBoxes = $restaurant->mysteryBoxes()
+            ->where('stock', '>', 0)
+            ->latest()
+            ->get();
+
+        return view('customer.restaurants.show', [
+            'restaurant' => $restaurant,
+            'mysteryBoxes' => $mysteryBoxes,
         ]);
     }
 }

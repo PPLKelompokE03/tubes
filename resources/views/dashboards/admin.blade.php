@@ -26,6 +26,24 @@
                 </div>
             </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-5">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Food saved (units)</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ $foodSavedQuantity ?? 0 }}</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Paid &amp; completed orders, by quantity</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-5">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Est. food rescued (kg)</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ number_format((float) ($estimatedFoodSavedKg ?? 0), 2, ',', '.') }}</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">0.5 kg per unit (illustrative)</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-5">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Est. CO₂ reduction (kg)</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ number_format((float) ($estimatedCo2ReductionKg ?? 0), 2, ',', '.') }}</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">2.5 kg CO₂e per kg food (illustrative)</p>
+                </div>
+            </div>
+
             <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">System Activity (Recent Orders)</h3>
                 <div class="overflow-x-auto">

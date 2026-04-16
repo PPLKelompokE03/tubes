@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class RestaurantController extends Controller
@@ -31,16 +32,24 @@ class RestaurantController extends Controller
             'address' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,png|max:2048',
+            'menu_access_pin' => 'required|digits_between:4,8',
         ]);
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('restaurants', 'public');
         }
+        $validated['menu_access_pin'] = Hash::make($validated['menu_access_pin']);
 
         $validated['user_id'] = $request->user()->id;
         $restaurant = Restaurant::create($validated);
 
-        return response()->json($restaurant, 201);
+        if ($request->expectsJson()) {
+            return response()->json($restaurant, 201);
+        }
+
+        return redirect()
+            ->route('seller.restaurants')
+            ->with('status', 'Restoran berhasil ditambahkan.');
     }
 
     public function show(Restaurant $restaurant)
@@ -63,6 +72,7 @@ class RestaurantController extends Controller
             'address' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,png|max:2048',
+            'menu_access_pin' => 'nullable|digits_between:4,8',
         ]);
 
         if ($request->hasFile('image')) {
@@ -72,9 +82,21 @@ class RestaurantController extends Controller
             $validated['image'] = $request->file('image')->store('restaurants', 'public');
         }
 
+        if (! empty($validated['menu_access_pin'])) {
+            $validated['menu_access_pin'] = Hash::make($validated['menu_access_pin']);
+        } else {
+            unset($validated['menu_access_pin']);
+        }
+
         $restaurant->update($validated);
 
-        return response()->json($restaurant);
+        if ($request->expectsJson()) {
+            return response()->json($restaurant);
+        }
+
+        return redirect()
+            ->route('seller.restaurants')
+            ->with('status', 'Restoran berhasil diperbarui.');
     }
 
     public function destroy(Restaurant $restaurant)
@@ -88,6 +110,12 @@ class RestaurantController extends Controller
 
         $restaurant->delete();
 
-        return response()->json(['message' => 'Restaurant deleted successfully.']);
+        if (request()->expectsJson()) {
+            return response()->json(['message' => 'Restaurant deleted successfully.']);
+        }
+
+        return redirect()
+            ->route('seller.restaurants')
+            ->with('status', 'Restoran berhasil dihapus.');
     }
 }

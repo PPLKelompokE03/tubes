@@ -15,6 +15,7 @@ class Restaurant extends Model
         'address',
         'description',
         'image',
+        'menu_access_pin',
     ];
 
     public function user()
